@@ -1,4 +1,6 @@
-const { executeCommand } = require('@pnp/cli-microsoft365');
+const { executeCommand, on } = require('@pnp/cli-microsoft365');
+
+on('stdout', message => console.log(message));
 
 executeCommand('status', { output: 'text' })
   .then(res => {
@@ -19,6 +21,11 @@ executeCommand('status', { output: 'text' })
     return executeCommand('spo web get', { webUrl: siteUrl, output: 'json' });
   })
   .then(res => {
-    console.log(JSON.parse(res.stdout).Title);
+    // console.log(JSON.parse(res.stdout).Title);
   })
+  .catch(err => console.error(err));
+
+executeCommand('login', { output: 'text' })
+  .then(_ => executeCommand('status', { output: 'text' }))
+  .then(_ => {})
   .catch(err => console.error(err));
